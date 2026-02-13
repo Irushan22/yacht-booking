@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Users, Ruler, DollarSign } from "lucide-react";
@@ -8,6 +9,8 @@ interface FleetProps {
 }
 
 const Fleet = ({ onSelectYacht }: FleetProps) => {
+  const navigate = useNavigate();
+
   return (
     <section id="fleet" className="py-20 lg:py-28 bg-background">
       <div className="container px-4">
@@ -38,7 +41,8 @@ const Fleet = ({ onSelectYacht }: FleetProps) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.6 }}
-              className="group bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300"
+              className="group bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300 cursor-pointer"
+              onClick={() => navigate(`/yacht/${yacht.id}`)}
             >
               {/* Image */}
               <div className="relative h-48 overflow-hidden">
@@ -100,11 +104,10 @@ const Fleet = ({ onSelectYacht }: FleetProps) => {
                 </div>
 
                 <Button
-                  variant="cta"
-                  className="w-full"
-                  onClick={() => onSelectYacht(yacht)}
+                  variant="outline"
+                  className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300"
                 >
-                  Book This Yacht
+                  View Details
                 </Button>
               </div>
             </motion.div>

@@ -42,6 +42,7 @@ const timeSlots = [
 
 const bookingSchema = z.object({
   name: z.string().trim().min(2, "Name is required"),
+  phone: z.string().min(10, "Phone number must be at least 10 characters"),
   date: z.date({ required_error: "Please select a date" }),
   timeSlot: z.string().min(1, "Please select a time slot"),
   passengers: z.number().min(1).max(20),
@@ -59,6 +60,7 @@ const BookingModal = ({ yacht, isOpen, onClose }: BookingModalProps) => {
   const [timeSlot, setTimeSlot] = useState("");
   const [passengers, setPassengers] = useState(2);
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -71,6 +73,7 @@ const BookingModal = ({ yacht, isOpen, onClose }: BookingModalProps) => {
     setTimeSlot("");
     setPassengers(2);
     setName("");
+    setPhone("");
     setNotes("");
     setErrors({});
   };
@@ -86,6 +89,7 @@ const BookingModal = ({ yacht, isOpen, onClose }: BookingModalProps) => {
 
     const result = bookingSchema.safeParse({
       name,
+      phone,
       date,
       timeSlot,
       passengers,
@@ -111,12 +115,14 @@ const BookingModal = ({ yacht, isOpen, onClose }: BookingModalProps) => {
 
 ⛵ *Yacht:* ${yacht.name} (${yacht.type})
 👤 *Name:* ${name}
+📞 *Phone:* ${phone}
 📅 *Date:* ${formattedDate}
 ⏰ *Time:* ${selectedTime}
 👥 *Passengers:* ${passengers}
 ${notes ? `\n📝 *Notes:* ${notes}` : ""}`;
 
-    const whatsappUrl = `https://wa.me/1234567890?text=${encodeURIComponent(
+    // TODO: fast_rewrite_todo: Replace with the actual destination phone number
+    const whatsappUrl = `https://wa.me/+971556530484?text=${encodeURIComponent(
       message,
     )}`;
 
@@ -149,28 +155,22 @@ ${notes ? `\n📝 *Notes:* ${notes}` : ""}`;
               className="w-full max-w-lg bg-card rounded-2xl shadow-elevated overflow-hidden"
             >
               {/* Header */}
-              <div className="relative h-32">
-                <img
-                  src={yacht.image}
-                  alt={yacht.name}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-
-                <button
-                  onClick={handleClose}
-                  className="absolute top-3 right-3 w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-white"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-
-                <div className="absolute bottom-3 left-4 text-white">
-                  <div className="flex items-center gap-2 text-sm opacity-80">
+              <div className="flex items-center justify-between p-5 border-b bg-card">
+                <div>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
                     <Ship className="w-4 h-4" />
                     {yacht.type}
                   </div>
-                  <h3 className="text-xl font-semibold">{yacht.name}</h3>
+                  <h3 className="text-xl font-display font-semibold text-foreground">
+                    {yacht.name}
+                  </h3>
                 </div>
+                <button
+                  onClick={handleClose}
+                  className="w-8 h-8 hover:bg-muted rounded-full flex items-center justify-center transition-colors"
+                >
+                  <X className="w-5 h-5 text-muted-foreground" />
+                </button>
               </div>
 
               {/* Form */}
@@ -182,9 +182,25 @@ ${notes ? `\n📝 *Notes:* ${notes}` : ""}`;
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className={errors.name ? "border-destructive" : ""}
+                    placeholder="Enter your full name"
                   />
                   {errors.name && (
                     <p className="text-destructive text-sm">{errors.name}</p>
+                  )}
+                </div>
+
+                {/* Phone */}
+                <div>
+                  <Label>Phone Number</Label>
+                  <Input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className={errors.phone ? "border-destructive" : ""}
+                    placeholder="Enter your phone number"
+                  />
+                  {errors.phone && (
+                    <p className="text-destructive text-sm">{errors.phone}</p>
                   )}
                 </div>
 
@@ -214,13 +230,18 @@ ${notes ? `\n📝 *Notes:* ${notes}` : ""}`;
                       />
                     </PopoverContent>
                   </Popover>
+                  {errors.date && (
+                    <p className="text-destructive text-sm mt-1">
+                      {errors.date}
+                    </p>
+                  )}
                 </div>
 
                 {/* Time */}
                 <div>
                   <Label>Time Slot</Label>
                   <Select value={timeSlot} onValueChange={setTimeSlot}>
-                    <SelectTrigger>
+                    <SelectTrigger className={errors.timeSlot ? "border-destructive" : ""}>
                       <SelectValue placeholder="Select time" />
                     </SelectTrigger>
                     <SelectContent>
@@ -231,6 +252,9 @@ ${notes ? `\n📝 *Notes:* ${notes}` : ""}`;
                       ))}
                     </SelectContent>
                   </Select>
+                   {errors.timeSlot && (
+                    <p className="text-destructive text-sm mt-1">{errors.timeSlot}</p>
+                  )}
                 </div>
 
                 {/* Passengers */}
@@ -259,6 +283,7 @@ ${notes ? `\n📝 *Notes:* ${notes}` : ""}`;
                   <Textarea
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
+                    placeholder="Any special requests?"
                   />
                 </div>
 

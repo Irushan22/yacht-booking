@@ -1,9 +1,8 @@
 import { useState } from "react";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import About from "@/components/About";
 import Fleet from "@/components/Fleet";
-import Pricing from "@/components/Pricing";
+import PackageBuilder from "@/components/PackageBuilder";
 import BookingModal from "@/components/BookingModal";
 import Footer from "@/components/Footer";
 import { Yacht } from "@/data/yachts";
@@ -26,9 +25,8 @@ const Index = () => {
       <Header onBookNow={scrollToFleet} />
       <main>
         <Hero onBookNow={scrollToFleet} />
-        <About />
         <Fleet onSelectYacht={handleSelectYacht} />
-        <Pricing onBookNow={scrollToFleet} />
+        <PackageBuilder />
       </main>
       <Footer />
 

@@ -5,9 +5,10 @@ import { Anchor, Menu, X } from "lucide-react";
 
 interface HeaderProps {
   onBookNow: () => void;
+  alwaysOpaque?: boolean;
 }
 
-const Header = ({ onBookNow }: HeaderProps) => {
+const Header = ({ onBookNow, alwaysOpaque = false }: HeaderProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -20,9 +21,8 @@ const Header = ({ onBookNow }: HeaderProps) => {
   }, []);
 
   const navLinks = [
-    { href: "#about", label: "About" },
     { href: "#fleet", label: "Our Fleet" },
-    { href: "#pricing", label: "Packages" },
+    { href: "#package-builder", label: "Plan Your Trip" },
   ];
 
   const scrollToSection = (href: string) => {
@@ -33,13 +33,15 @@ const Header = ({ onBookNow }: HeaderProps) => {
     setIsMobileMenuOpen(false);
   };
 
+  const showOpaque = isScrolled || alwaysOpaque;
+
   return (
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
+        showOpaque
           ? "bg-background/95 backdrop-blur-md shadow-soft"
           : "bg-transparent"
       }`}
@@ -57,12 +59,12 @@ const Header = ({ onBookNow }: HeaderProps) => {
           >
             <Anchor
               className={`w-6 h-6 transition-colors ${
-                isScrolled ? "text-primary" : "text-cta"
+                showOpaque ? "text-primary" : "text-cta"
               }`}
             />
             <span
               className={`font-display text-lg font-semibold transition-colors ${
-                isScrolled ? "text-foreground" : "text-white"
+                showOpaque ? "text-foreground" : "text-white"
               }`}
             >
               Paradise Yacht
@@ -76,7 +78,7 @@ const Header = ({ onBookNow }: HeaderProps) => {
                 key={link.href}
                 onClick={() => scrollToSection(link.href)}
                 className={`font-medium transition-colors hover:text-cta ${
-                  isScrolled ? "text-foreground" : "text-white/90"
+                  showOpaque ? "text-foreground" : "text-white/90"
                 }`}
               >
                 {link.label}
@@ -96,13 +98,13 @@ const Header = ({ onBookNow }: HeaderProps) => {
             {isMobileMenuOpen ? (
               <X
                 className={`w-6 h-6 ${
-                  isScrolled ? "text-foreground" : "text-white"
+                  showOpaque ? "text-foreground" : "text-white"
                 }`}
               />
             ) : (
               <Menu
                 className={`w-6 h-6 ${
-                  isScrolled ? "text-foreground" : "text-white"
+                  showOpaque ? "text-foreground" : "text-white"
                 }`}
               />
             )}
