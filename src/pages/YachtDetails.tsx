@@ -4,6 +4,7 @@ import { yachts } from "@/data/yachts";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BookingModal from "@/components/BookingModal";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Users, Ruler, DollarSign, ArrowLeft, Check } from "lucide-react";
 import { motion } from "framer-motion";
@@ -31,8 +32,40 @@ const YachtDetails = () => {
     );
   }
 
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": yacht.name,
+    "image": yacht.image, // Ensure this is a full URL or handled in SEO component
+    "description": yacht.description,
+    "brand": {
+      "@type": "Brand",
+      "name": "Paradise Yacht"
+    },
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "USD",
+      "price": yacht.pricePerHour,
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": yacht.pricePerHour,
+        "priceCurrency": "USD",
+        "unitCode": "HUR" // Per Hour
+      },
+      "availability": "https://schema.org/InStock"
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title={`${yacht.name} | Luxury Yacht Charter Dubai | Paradise Yacht`}
+        description={`Book ${yacht.name} (${yacht.type}) in Dubai. ${yacht.description} Capacity: ${yacht.capacity} guests. Price: $${yacht.pricePerHour}/hour.`}
+        image={yacht.image}
+        schema={schema}
+        type="product"
+        canonical={`/yacht/${yacht.id}`}
+      />
       <Header onBookNow={() => setIsModalOpen(true)} alwaysOpaque={true} />
       
       <main className="pt-24 pb-16">
