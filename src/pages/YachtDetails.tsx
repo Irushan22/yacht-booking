@@ -69,113 +69,109 @@ const YachtDetails = () => {
       />
       <Header onBookNow={() => setIsModalOpen(true)} alwaysOpaque={true} />
       
-      <main className="pt-24 pb-16">
-        <div className="container px-4 mx-auto">
-          <Button 
-            onClick={() => navigate("/")}
-            variant="ghost"
-            className="mb-8"
+      <main>
+        {/* Full-height split: image flush to the left edge, content fills the viewport */}
+        <section className="relative grid lg:grid-cols-2 lg:h-screen">
+          {/* Image — flush to the left/bottom edges, sits directly under the fixed navbar */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="relative h-72 sm:h-96 lg:h-screen"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Fleet
-          </Button>
+            <img
+              src={yacht.image}
+              alt={yacht.name}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            {/* Image Section */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              className="rounded-3xl overflow-hidden shadow-elevated aspect-[4/3] relative"
-            >
-              <img 
-                src={yacht.image} 
-                alt={yacht.name} 
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute top-4 left-4">
-                <span className="bg-cta text-cta-foreground font-semibold px-4 py-2 rounded-full shadow-lg">
-                  {yacht.type}
-                </span>
-              </div>
-            </motion.div>
+          {/* Details — full viewport height, scrolls internally if the content is tall */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="lg:h-screen flex flex-col justify-center px-6 sm:px-8 lg:px-12 pt-10 lg:pt-24 pb-12"
+          >
+            <div className="max-w-xl w-full mx-auto lg:mx-0 space-y-5">
+              <Button
+                onClick={() => navigate("/")}
+                variant="ghost"
+                className="-ml-2"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Fleet
+              </Button>
 
-            {/* Details Section */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="space-y-8"
-            >
               <div>
-                <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
+                <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-2">
                   {yacht.name}
                 </h1>
-                <p className="text-xl text-muted-foreground leading-relaxed">
+                <p className="text-sm lg:text-base text-muted-foreground leading-relaxed line-clamp-3">
                   {yacht.description}
                 </p>
               </div>
 
               {/* Key Specs */}
-              <div className="grid grid-cols-3 gap-4 p-6 bg-card rounded-2xl border border-border/50">
+              <div className="grid grid-cols-3 gap-4 p-4 bg-card rounded-2xl border border-border/50">
                 <div className="text-center">
-                  <div className="flex justify-center mb-2">
-                    <Users className="w-6 h-6 text-primary" />
+                  <div className="flex justify-center mb-1.5">
+                    <Users className="w-5 h-5 text-primary" />
                   </div>
-                  <div className="font-semibold text-lg">{yacht.capacity}</div>
-                  <div className="text-xs text-muted-foreground uppercase tracking-wider">Passengers</div>
+                  <div className="font-semibold text-base">{yacht.capacity}</div>
+                  <div className="text-[0.7rem] text-muted-foreground uppercase tracking-wider">Passengers</div>
                 </div>
                 <div className="text-center border-l border-border/50">
-                  <div className="flex justify-center mb-2">
-                    <Ruler className="w-6 h-6 text-primary" />
+                  <div className="flex justify-center mb-1.5">
+                    <Ruler className="w-5 h-5 text-primary" />
                   </div>
-                  <div className="font-semibold text-lg">{yacht.length}</div>
-                  <div className="text-xs text-muted-foreground uppercase tracking-wider">Length</div>
+                  <div className="font-semibold text-base">{yacht.length}</div>
+                  <div className="text-[0.7rem] text-muted-foreground uppercase tracking-wider">Length</div>
                 </div>
                 <div className="text-center border-l border-border/50">
-                  <div className="flex justify-center mb-2">
-                    <DollarSign className="w-6 h-6 text-cta" />
+                  <div className="flex justify-center mb-1.5">
+                    <DollarSign className="w-5 h-5 text-cta" />
                   </div>
-                  <div className="font-semibold text-lg">${yacht.pricePerHour}</div>
-                  <div className="text-xs text-muted-foreground uppercase tracking-wider">Per Hour</div>
+                  <div className="font-semibold text-base">${yacht.pricePerHour}</div>
+                  <div className="text-[0.7rem] text-muted-foreground uppercase tracking-wider">Per Hour</div>
                 </div>
               </div>
 
               {/* Features */}
               <div>
-                <h3 className="text-xl font-semibold mb-4">Features & Amenities</h3>
-                <div className="grid sm:grid-cols-2 gap-3">
+                <h3 className="text-base font-semibold mb-2.5">Features & Amenities</h3>
+                <div className="grid sm:grid-cols-2 gap-2">
                   {yacht.features.map((feature) => (
                     <div
                       key={feature}
-                      className="flex items-center gap-3 p-3 bg-secondary/50 rounded-xl"
+                      className="flex items-center gap-2.5 p-2 bg-secondary/50 rounded-lg"
                     >
-                      <div className="w-8 h-8 rounded-full bg-background flex items-center justify-center shadow-sm text-primary">
-                        <Check className="w-4 h-4" />
+                      <div className="w-6 h-6 shrink-0 rounded-full bg-background flex items-center justify-center shadow-sm text-primary">
+                        <Check className="w-3.5 h-3.5" />
                       </div>
-                      <span className="font-medium">{feature}</span>
+                      <span className="text-sm font-medium">{feature}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Action */}
-              <div className="pt-4">
-                <Button 
-                  size="lg" 
-                  variant="cta" 
-                  className="w-full text-lg h-14 shadow-lg shadow-cta/20"
+              <div className="pt-1">
+                <Button
+                  size="lg"
+                  variant="cta"
+                  className="w-full text-base h-12 shadow-lg shadow-cta/20"
                   onClick={() => setIsModalOpen(true)}
                 >
                   Book {yacht.name} Now
                 </Button>
-                <p className="text-center text-sm text-muted-foreground mt-4">
+                <p className="text-center text-xs text-muted-foreground mt-3">
                   No payment required to inquire. We'll verify availability via WhatsApp.
                 </p>
               </div>
-            </motion.div>
-          </div>
-        </div>
+            </div>
+          </motion.div>
+        </section>
       </main>
 
       <Footer />

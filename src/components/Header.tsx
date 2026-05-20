@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Anchor, Menu, X } from "lucide-react";
@@ -12,6 +13,8 @@ interface HeaderProps {
 const Header = ({ onBookNow, alwaysOpaque = false }: HeaderProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,11 +27,19 @@ const Header = ({ onBookNow, alwaysOpaque = false }: HeaderProps) => {
   const navLinks = siteConfig.content.nav;
 
   const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
     setIsMobileMenuOpen(false);
+
+    // When we're not on the homepage, the sections don't exist yet — route
+    // home first, then scroll once it has mounted.
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+      return;
+    }
+
+    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
 
   const showOpaque = isScrolled || alwaysOpaque;
@@ -52,7 +63,11 @@ const Header = ({ onBookNow, alwaysOpaque = false }: HeaderProps) => {
             className="flex items-center gap-2"
             onClick={(e) => {
               e.preventDefault();
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              if (location.pathname === "/") {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              } else {
+                navigate("/");
+              }
             }}
           >
             <Anchor

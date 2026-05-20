@@ -23,7 +23,7 @@ const Fleet = ({ onSelectYacht }: FleetProps) => {
   const hasMore = yachts.length > INITIAL_COUNT;
 
   return (
-    <section id="fleet" className="py-20 lg:py-28 bg-muted">
+    <section id="fleet" className="py-20 lg:py-28 bg-muted scroll-mt-16 lg:scroll-mt-20">
       <div className="container px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

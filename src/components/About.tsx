@@ -15,8 +15,11 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="bg-background overflow-hidden">
-      <div className="grid lg:grid-cols-2 lg:items-stretch">
+    <section
+      id="about"
+      className="bg-background overflow-hidden scroll-mt-16 lg:scroll-mt-20 lg:min-h-screen"
+    >
+      <div className="grid lg:grid-cols-2 lg:items-stretch lg:min-h-screen">
         {/* Image — full-bleed to the left edge and flush with the hero above */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -39,7 +42,7 @@ const About = () => {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.15 }}
-          className="px-6 py-16 sm:px-8 lg:py-24 lg:pl-12 xl:pl-16 lg:pr-8"
+          className="px-6 py-16 sm:px-8 lg:py-24 lg:pl-12 xl:pl-16 lg:pr-8 lg:flex lg:flex-col lg:justify-center"
         >
           <div className="max-w-xl">
             <span className="text-primary text-sm font-semibold">{about.eyebrow}</span>

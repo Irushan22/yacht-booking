@@ -80,7 +80,7 @@ _I would like to check availability for this custom package._`;
   return (
     <section
       id="package-builder"
-      className="py-20 lg:py-28 bg-background relative overflow-hidden"
+      className="py-20 lg:py-28 bg-background relative overflow-hidden scroll-mt-16 lg:scroll-mt-20"
     >
       {/* Background Decorative Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 opacity-10 pointer-events-none">
