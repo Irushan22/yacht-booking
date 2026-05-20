@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Anchor, Menu, X } from "lucide-react";
+import { siteConfig } from "@/config/site";
 
 interface HeaderProps {
   onBookNow: () => void;
@@ -67,7 +68,7 @@ const Header = ({ onBookNow, alwaysOpaque = false }: HeaderProps) => {
                 showOpaque ? "text-foreground" : "text-white"
               }`}
             >
-              Paradise Yacht
+              {siteConfig.name}
             </span>
           </a>
 

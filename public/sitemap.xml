@@ -1,56 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Update the domain below to match siteConfig.url (src/config/site.ts).
+  Add a <url> entry for every yacht id in src/data/yachts.ts.
+-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://paradiseyacht.ae/</loc>
-    <lastmod>2024-03-20</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://paradiseyacht.ae/yacht/sport-cruiser</loc>
-    <lastmod>2024-03-20</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://paradiseyacht.ae/yacht/sailing-yacht</loc>
-    <lastmod>2024-03-20</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://paradiseyacht.ae/yacht/catamaran</loc>
-    <lastmod>2024-03-20</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://paradiseyacht.ae/yacht/mega-yacht</loc>
-    <lastmod>2024-03-20</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://paradiseyacht.ae/yacht/sunset-chaser</loc>
-    <lastmod>2024-03-20</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://paradiseyacht.ae/yacht/blue-horizon</loc>
-    <lastmod>2024-03-20</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://paradiseyacht.ae/yacht/island-hopper</loc>
-    <lastmod>2024-03-20</lastmod>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://paradiseyacht.ae/yacht/grand-voyager</loc>
-    <lastmod>2024-03-20</lastmod>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://paradiseyacht.ae/yacht/coral-queen</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://paradiseyacht.ae/yacht/majestic-pearl</loc>
+    <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

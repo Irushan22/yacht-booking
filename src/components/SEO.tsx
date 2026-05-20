@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { siteConfig } from "@/config/site";
 
 interface SEOProps {
   title: string;
@@ -7,19 +8,19 @@ interface SEOProps {
   type?: "website" | "article" | "product";
   name?: string;
   image?: string;
-  schema?: Record<string, any>;
+  schema?: Record<string, unknown>;
 }
 
-const SEO = ({ 
-  title, 
-  description, 
-  canonical, 
-  type = "website", 
-  name = "Paradise Yacht", 
-  image = "/og-image.png", // Assuming a default OG image exists or will be added
-  schema 
+const SEO = ({
+  title,
+  description,
+  canonical,
+  type = "website",
+  name = siteConfig.name,
+  image = siteConfig.seo.ogImage,
+  schema
 }: SEOProps) => {
-  const siteUrl = "https://paradiseyacht.ae"; // TODO: Replace with actual domain
+  const siteUrl = siteConfig.url;
   const fullUrl = canonical ? `${siteUrl}${canonical}` : siteUrl;
   const fullImage = image.startsWith("http") ? image : `${siteUrl}${image}`;
 
@@ -40,6 +41,9 @@ const SEO = ({
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
+      {siteConfig.social.twitter && (
+        <meta name="twitter:site" content={`@${siteConfig.social.twitter}`} />
+      )}
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={fullImage} />

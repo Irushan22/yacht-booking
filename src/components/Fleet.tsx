@@ -1,15 +1,23 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Users, Ruler, DollarSign } from "lucide-react";
+import { Users, Ruler, DollarSign, ChevronDown } from "lucide-react";
 import { yachts, Yacht } from "@/data/yachts";
 
 interface FleetProps {
   onSelectYacht: (yacht: Yacht) => void;
 }
 
+/** How many yachts to show before the visitor clicks "View All". */
+const INITIAL_COUNT = 8;
+
 const Fleet = ({ onSelectYacht }: FleetProps) => {
   const navigate = useNavigate();
+  const [showAll, setShowAll] = useState(false);
+
+  const visibleYachts = showAll ? yachts : yachts.slice(0, INITIAL_COUNT);
+  const hasMore = yachts.length > INITIAL_COUNT;
 
   return (
     <section id="fleet" className="py-20 lg:py-28 bg-background">
@@ -34,7 +42,7 @@ const Fleet = ({ onSelectYacht }: FleetProps) => {
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {yachts.map((yacht, index) => (
+          {visibleYachts.map((yacht, index) => (
             <motion.div
               key={yacht.id}
               initial={{ opacity: 0, y: 30 }}
@@ -49,6 +57,7 @@ const Fleet = ({ onSelectYacht }: FleetProps) => {
                 <img
                   src={yacht.image}
                   alt={yacht.name}
+                  loading="lazy"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent" />
@@ -113,6 +122,24 @@ const Fleet = ({ onSelectYacht }: FleetProps) => {
             </motion.div>
           ))}
         </div>
+
+        {hasMore && (
+          <div className="flex justify-center mt-12">
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => setShowAll((prev) => !prev)}
+              className="group"
+            >
+              {showAll ? "Show Less" : `View All Yachts (${yachts.length})`}
+              <ChevronDown
+                className={`w-4 h-4 ml-2 transition-transform duration-300 ${
+                  showAll ? "rotate-180" : ""
+                }`}
+              />
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );

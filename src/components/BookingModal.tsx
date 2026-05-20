@@ -29,6 +29,7 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { Yacht } from "@/data/yachts";
+import { buildWhatsAppUrl } from "@/config/site";
 import { z } from "zod";
 import { createPortal } from "react-dom";
 
@@ -121,12 +122,7 @@ const BookingModal = ({ yacht, isOpen, onClose }: BookingModalProps) => {
 👥 *Passengers:* ${passengers}
 ${notes ? `\n📝 *Notes:* ${notes}` : ""}`;
 
-    // TODO: fast_rewrite_todo: Replace with the actual destination phone number
-    const whatsappUrl = `https://wa.me/+971556530484?text=${encodeURIComponent(
-      message,
-    )}`;
-
-    window.open(whatsappUrl, "_blank");
+    window.open(buildWhatsAppUrl(message), "_blank");
     handleClose();
   };
 

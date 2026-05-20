@@ -23,6 +23,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { buildWhatsAppUrl } from "@/config/site";
 
 const PackageBuilder = () => {
   const [duration, setDuration] = useState([4]);
@@ -75,12 +76,7 @@ ${selectedAddOns || "None selected"}
 
 _I would like to check availability for this custom package._`;
 
-    // TODO: fast_rewrite_todo: Replace with the actual destination phone number
-    const whatsappUrl = `https://wa.me/+971556530484?text=${encodeURIComponent(
-      message
-    )}`;
-
-    window.open(whatsappUrl, "_blank");
+    window.open(buildWhatsAppUrl(message), "_blank");
   };
 
   return (

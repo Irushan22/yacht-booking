@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BookingModal from "@/components/BookingModal";
 import SEO from "@/components/SEO";
+import { siteConfig } from "@/config/site";
 import { Button } from "@/components/ui/button";
 import { Users, Ruler, DollarSign, ArrowLeft, Check } from "lucide-react";
 import { motion } from "framer-motion";
@@ -40,16 +41,16 @@ const YachtDetails = () => {
     "description": yacht.description,
     "brand": {
       "@type": "Brand",
-      "name": "Paradise Yacht"
+      "name": siteConfig.name
     },
     "offers": {
       "@type": "Offer",
-      "priceCurrency": "USD",
+      "priceCurrency": siteConfig.seo.priceCurrency,
       "price": yacht.pricePerHour,
       "priceSpecification": {
         "@type": "UnitPriceSpecification",
         "price": yacht.pricePerHour,
-        "priceCurrency": "USD",
+        "priceCurrency": siteConfig.seo.priceCurrency,
         "unitCode": "HUR" // Per Hour
       },
       "availability": "https://schema.org/InStock"
@@ -59,7 +60,7 @@ const YachtDetails = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title={`${yacht.name} | Luxury Yacht Charter Dubai | Paradise Yacht`}
+        title={`${yacht.name} | Luxury Yacht Charter | ${siteConfig.name}`}
         description={`Book ${yacht.name} (${yacht.type}) in Dubai. ${yacht.description} Capacity: ${yacht.capacity} guests. Price: $${yacht.pricePerHour}/hour.`}
         image={yacht.image}
         schema={schema}
@@ -144,9 +145,9 @@ const YachtDetails = () => {
               <div>
                 <h3 className="text-xl font-semibold mb-4">Features & Amenities</h3>
                 <div className="grid sm:grid-cols-2 gap-3">
-                  {yacht.features.map((feature, index) => (
-                    <div 
-                      key={index}
+                  {yacht.features.map((feature) => (
+                    <div
+                      key={feature}
                       className="flex items-center gap-3 p-3 bg-secondary/50 rounded-xl"
                     >
                       <div className="w-8 h-8 rounded-full bg-background flex items-center justify-center shadow-sm text-primary">
