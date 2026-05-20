@@ -3,11 +3,12 @@ import { format } from "date-fns";
 import {
   CalendarIcon,
   Users,
-  Clock,
   Send,
   MessageCircle,
   X,
   Ship,
+  Minus,
+  Plus,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -28,7 +29,7 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
-import { Yacht } from "@/data/yachts";
+import { Yacht, yachts } from "@/data/yachts";
 import { buildWhatsAppUrl } from "@/config/site";
 import { z } from "zod";
 import { createPortal } from "react-dom";
@@ -63,11 +64,14 @@ const BookingModal = ({ yacht, isOpen, onClose }: BookingModalProps) => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
+  const [chosenYachtId, setChosenYachtId] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  if (!yacht) return null;
-
-  const maxPassengers = yacht.capacity;
+  // When opened from a specific yacht (Fleet/Details) `yacht` is set. When opened
+  // from the nav "Book Now", `yacht` is null and the visitor picks one below.
+  const activeYacht = yacht ?? yachts.find((y) => y.id === chosenYachtId) ?? null;
+  const showYachtPicker = !yacht;
+  const maxPassengers = activeYacht?.capacity ?? 20;
 
   const resetForm = () => {
     setDate(undefined);
@@ -76,6 +80,7 @@ const BookingModal = ({ yacht, isOpen, onClose }: BookingModalProps) => {
     setName("");
     setPhone("");
     setNotes("");
+    setChosenYachtId("");
     setErrors({});
   };
 
@@ -104,7 +109,13 @@ const BookingModal = ({ yacht, isOpen, onClose }: BookingModalProps) => {
           fieldErrors[err.path[0] as string] = err.message;
         }
       });
+      if (!activeYacht) fieldErrors.yacht = "Please select a yacht";
       setErrors(fieldErrors);
+      return;
+    }
+
+    if (!activeYacht) {
+      setErrors({ yacht: "Please select a yacht" });
       return;
     }
 
@@ -114,7 +125,7 @@ const BookingModal = ({ yacht, isOpen, onClose }: BookingModalProps) => {
 
     const message = `🛥️ *Yacht Booking Request*
 
-⛵ *Yacht:* ${yacht.name} (${yacht.type})
+⛵ *Yacht:* ${activeYacht.name} (${activeYacht.type})
 👤 *Name:* ${name}
 📞 *Phone:* ${phone}
 📅 *Date:* ${formattedDate}
@@ -148,17 +159,17 @@ ${notes ? `\n📝 *Notes:* ${notes}` : ""}`;
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.3 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-lg bg-card rounded-2xl shadow-elevated overflow-hidden"
+              className="w-full max-w-lg bg-card rounded-2xl shadow-elevated overflow-hidden flex flex-col max-h-[90vh]"
             >
               {/* Header */}
-              <div className="flex items-center justify-between p-5 border-b bg-card">
+              <div className="flex items-center justify-between p-5 border-b bg-card shrink-0">
                 <div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
                     <Ship className="w-4 h-4" />
-                    {yacht.type}
+                    {activeYacht ? activeYacht.type : "New Booking"}
                   </div>
                   <h3 className="text-xl font-display font-semibold text-foreground">
-                    {yacht.name}
+                    {activeYacht ? activeYacht.name : "Book Your Charter"}
                   </h3>
                 </div>
                 <button
@@ -170,10 +181,41 @@ ${notes ? `\n📝 *Notes:* ${notes}` : ""}`;
               </div>
 
               {/* Form */}
-              <form onSubmit={handleSubmit} className="p-6 space-y-5">
+              <form onSubmit={handleSubmit} className="flex flex-col min-h-0 flex-1">
+                {/* Scrollable field area */}
+                <div className="overflow-y-auto px-6 py-5 space-y-4">
+                {/* Yacht (only when not opened from a specific yacht) */}
+                {showYachtPicker && (
+                  <div>
+                    <Label className="mb-1.5 block">Select Yacht</Label>
+                    <Select
+                      value={chosenYachtId}
+                      onValueChange={(id) => {
+                        setChosenYachtId(id);
+                        const cap = yachts.find((y) => y.id === id)?.capacity ?? 20;
+                        setPassengers((p) => Math.min(p, cap));
+                      }}
+                    >
+                      <SelectTrigger className={errors.yacht ? "border-destructive" : ""}>
+                        <SelectValue placeholder="Choose a yacht" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {yachts.map((y) => (
+                          <SelectItem key={y.id} value={y.id}>
+                            {y.name} — {y.type}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.yacht && (
+                      <p className="text-destructive text-sm mt-1">{errors.yacht}</p>
+                    )}
+                  </div>
+                )}
+
                 {/* Name */}
                 <div>
-                  <Label>Your Name</Label>
+                  <Label className="mb-1.5 block">Your Name</Label>
                   <Input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -181,13 +223,13 @@ ${notes ? `\n📝 *Notes:* ${notes}` : ""}`;
                     placeholder="Enter your full name"
                   />
                   {errors.name && (
-                    <p className="text-destructive text-sm">{errors.name}</p>
+                    <p className="text-destructive text-sm mt-1">{errors.name}</p>
                   )}
                 </div>
 
                 {/* Phone */}
                 <div>
-                  <Label>Phone Number</Label>
+                  <Label className="mb-1.5 block">Phone Number</Label>
                   <Input
                     type="tel"
                     value={phone}
@@ -196,13 +238,13 @@ ${notes ? `\n📝 *Notes:* ${notes}` : ""}`;
                     placeholder="Enter your phone number"
                   />
                   {errors.phone && (
-                    <p className="text-destructive text-sm">{errors.phone}</p>
+                    <p className="text-destructive text-sm mt-1">{errors.phone}</p>
                   )}
                 </div>
 
                 {/* Date */}
                 <div>
-                  <Label>Date</Label>
+                  <Label className="mb-1.5 block">Date</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -235,7 +277,7 @@ ${notes ? `\n📝 *Notes:* ${notes}` : ""}`;
 
                 {/* Time */}
                 <div>
-                  <Label>Time Slot</Label>
+                  <Label className="mb-1.5 block">Time Slot</Label>
                   <Select value={timeSlot} onValueChange={setTimeSlot}>
                     <SelectTrigger className={errors.timeSlot ? "border-destructive" : ""}>
                       <SelectValue placeholder="Select time" />
@@ -254,40 +296,64 @@ ${notes ? `\n📝 *Notes:* ${notes}` : ""}`;
                 </div>
 
                 {/* Passengers */}
-                <div className="flex items-center gap-4">
-                  <Label>Passengers</Label>
-                  <Button
-                    type="button"
-                    onClick={() => setPassengers(Math.max(1, passengers - 1))}
-                  >
-                    -
-                  </Button>
-                  <span>{passengers}</span>
-                  <Button
-                    type="button"
-                    onClick={() =>
-                      setPassengers(Math.min(maxPassengers, passengers + 1))
-                    }
-                  >
-                    +
-                  </Button>
+                <div>
+                  <Label className="mb-1.5 block">Passengers</Label>
+                  <div className="flex items-center justify-between rounded-lg border border-input px-4 py-2">
+                    <span className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Users className="w-4 h-4" />
+                      Max {maxPassengers} guests
+                    </span>
+                    <div className="flex items-center gap-3">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        className="h-8 w-8 rounded-full"
+                        onClick={() => setPassengers(Math.max(1, passengers - 1))}
+                        disabled={passengers <= 1}
+                        aria-label="Decrease passengers"
+                      >
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                      <span className="w-6 text-center font-semibold text-foreground">
+                        {passengers}
+                      </span>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        className="h-8 w-8 rounded-full"
+                        onClick={() =>
+                          setPassengers(Math.min(maxPassengers, passengers + 1))
+                        }
+                        disabled={passengers >= maxPassengers}
+                        aria-label="Increase passengers"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Notes */}
                 <div>
-                  <Label>Notes</Label>
+                  <Label className="mb-1.5 block">Notes</Label>
                   <Textarea
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="Any special requests?"
                   />
                 </div>
+                </div>
 
-                <Button type="submit" variant="cta" className="w-full">
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  Confirm via WhatsApp
-                  <Send className="w-4 h-4 ml-2" />
-                </Button>
+                {/* Pinned footer */}
+                <div className="shrink-0 border-t bg-card px-6 py-4">
+                  <Button type="submit" variant="cta" className="w-full">
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    Confirm via WhatsApp
+                    <Send className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
               </form>
             </motion.div>
           </div>

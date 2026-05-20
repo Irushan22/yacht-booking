@@ -24,7 +24,10 @@ export default {
     extend: {
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
-        display: ["Playfair Display", "Georgia", "serif"],
+        // Single-font setup: headings/logo use Inter too. To go back to a serif
+        // display font, change this to e.g. ["Playfair Display", "Georgia", "serif"]
+        // and re-add the font to the <link> in index.html.
+        display: ["Inter", "system-ui", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",

@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
-
+/* Fonts (Playfair Display + Inter) are loaded in index.html for faster, non-blocking delivery. */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -17,8 +16,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 210 40% 15%;
 
-    /* Deep Ocean Blue */
-    --primary: 205 85% 35%;
+    /* Deep Navy */
+    --primary: 210 60% 25%;
     --primary-foreground: 0 0% 100%;
 
     /* Sandy Cream */
@@ -42,12 +41,12 @@
 
     --border: 210 20% 88%;
     --input: 210 20% 88%;
-    --ring: 205 85% 35%;
+    --ring: 210 60% 25%;
 
     --radius: 0.75rem;
 
     /* Gradients */
-    --gradient-ocean: linear-gradient(135deg, hsl(205 85% 35%) 0%, hsl(185 60% 45%) 100%);
+    --gradient-ocean: linear-gradient(135deg, hsl(210 60% 25%) 0%, hsl(185 60% 45%) 100%);
     --gradient-sunset: linear-gradient(135deg, hsl(38 90% 55%) 0%, hsl(25 95% 60%) 100%);
     --gradient-hero-overlay: linear-gradient(180deg, hsla(210 40% 10% / 0.3) 0%, hsla(210 40% 10% / 0.7) 100%);
 
@@ -76,7 +75,7 @@
     --popover: 210 40% 12%;
     --popover-foreground: 210 20% 95%;
 
-    --primary: 205 80% 50%;
+    --primary: 210 60% 55%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 210 30% 18%;
@@ -96,7 +95,7 @@
 
     --border: 210 30% 22%;
     --input: 210 30% 22%;
-    --ring: 205 80% 50%;
+    --ring: 210 60% 55%;
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
@@ -112,6 +111,13 @@
 @layer base {
   * {
     @apply border-border;
+  }
+
+  /* Prevent a transient horizontal scrollbar from entrance animations that
+     start off-screen (e.g. framer-motion x-offsets). `clip` clips overflow
+     without creating a scroll container, so it doesn't break position: sticky. */
+  html {
+    overflow-x: clip;
   }
 
   body {

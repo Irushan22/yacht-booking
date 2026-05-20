@@ -72,9 +72,9 @@ const YachtDetails = () => {
       <main className="pt-24 pb-16">
         <div className="container px-4 mx-auto">
           <Button 
-            onClick={() => navigate("/")} 
-            variant="ghost" 
-            className="mb-8 hover:bg-accent"
+            onClick={() => navigate("/")}
+            variant="ghost"
+            className="mb-8"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Fleet

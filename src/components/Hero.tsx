@@ -13,7 +13,7 @@ const Hero = ({ onBookNow }: HeroProps) => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
@@ -53,7 +53,7 @@ const Hero = ({ onBookNow }: HeroProps) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-white/80 text-lg sm:text-xl max-w-2xl mx-auto mb-10"
+          className="text-white/80 text-lg sm:text-sm max-w-2xl mx-auto mb-10"
         >
           Experience the ultimate luxury yacht charter. Crystal-clear waters,
           stunning coastlines, and memories that last forever.

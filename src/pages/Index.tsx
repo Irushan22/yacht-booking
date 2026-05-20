@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import About from "@/components/About";
 import Fleet from "@/components/Fleet";
 import PackageBuilder from "@/components/PackageBuilder";
 import CTA from "@/components/CTA";
@@ -16,6 +17,12 @@ const Index = () => {
 
   const handleSelectYacht = (yacht: Yacht) => {
     setSelectedYacht(yacht);
+    setIsModalOpen(true);
+  };
+
+  // Nav "Book Now" — open the modal with no yacht pre-selected (visitor picks one).
+  const openBookingModal = () => {
+    setSelectedYacht(null);
     setIsModalOpen(true);
   };
 
@@ -54,9 +61,10 @@ const Index = () => {
         description={siteConfig.seo.defaultDescription}
         schema={schema}
       />
-      <Header onBookNow={scrollToFleet} />
+      <Header onBookNow={openBookingModal} />
       <main>
         <Hero onBookNow={scrollToFleet} />
+        <About />
         <Fleet onSelectYacht={handleSelectYacht} />
         <PackageBuilder />
         <CTA onBookNow={scrollToFleet} />

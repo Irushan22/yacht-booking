@@ -22,6 +22,8 @@ const Header = ({ onBookNow, alwaysOpaque = false }: HeaderProps) => {
   }, []);
 
   const navLinks = [
+    { href: "#home", label: "Home" },
+    { href: "#about", label: "About" },
     { href: "#fleet", label: "Our Fleet" },
     { href: "#package-builder", label: "Plan Your Trip" },
   ];

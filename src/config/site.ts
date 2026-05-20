@@ -27,14 +27,14 @@ export const siteConfig = {
   /**
    * Destination WhatsApp number in INTERNATIONAL format, digits only.
    * Booking and enquiry forms open a WhatsApp chat to this number.
-   * Example: "971556530484" (UAE) or "14155552671" (US).
+   * Example: "971501234567" (UAE) or "14155552671" (US).
    */
-  whatsappNumber: "971556530484",
+  whatsappNumber: "971501234567",
 
   /** Public contact details shown in the footer. */
   contact: {
-    phoneDisplay: "+971 55 653 0484", // human-friendly version shown to users
-    email: "hello@paradiseyacht.com",
+    phoneDisplay: "+971 50 123 4567", // human-friendly version shown to users
+    email: "hello@paradiseyacht.ae",
     address: "Dubai Marina, Dubai, UAE",
   },
 
