@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Anchor, ChevronDown } from "lucide-react";
-import heroYacht from "@/assets/hero-yacht.jpg";
 
 interface HeroProps {
   onBookNow: () => void;
@@ -14,13 +13,22 @@ const Hero = ({ onBookNow }: HeroProps) => {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image */}
+      {/* Background Video */}
       <div className="absolute inset-0">
-        <img
-          src={heroYacht}
-          alt="Luxury yacht on turquoise waters"
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster="https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&w=1920&q=80"
           className="w-full h-full object-cover"
-        />
+        >
+          {/* Aerial/drone shot of a yacht — 4K source */}
+          <source
+            src="https://videos.pexels.com/video-files/32910542/14026371_3840_2160_60fps.mp4"
+            type="video/mp4"
+          />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-b from-foreground/30 via-foreground/40 to-foreground/70" />
       </div>
 
