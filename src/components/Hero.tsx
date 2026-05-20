@@ -1,10 +1,13 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Anchor, ChevronDown } from "lucide-react";
+import { siteConfig } from "@/config/site";
 
 interface HeroProps {
   onBookNow: () => void;
 }
+
+const hero = siteConfig.content.hero;
 
 const Hero = ({ onBookNow }: HeroProps) => {
   const scrollToContent = () => {
@@ -20,14 +23,11 @@ const Hero = ({ onBookNow }: HeroProps) => {
           loop
           muted
           playsInline
-          poster="https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&w=1920&q=80"
+          poster={hero.posterImage}
           className="w-full h-full object-cover"
         >
-          {/* Aerial/drone shot of a yacht — 4K source */}
-          <source
-            src="https://videos.pexels.com/video-files/32910542/14026371_3840_2160_60fps.mp4"
-            type="video/mp4"
-          />
+          {/* Aerial/drone shot of a yacht — source set in siteConfig.content.hero */}
+          <source src={hero.videoUrl} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-foreground/30 via-foreground/40 to-foreground/70" />
       </div>
@@ -42,7 +42,7 @@ const Hero = ({ onBookNow }: HeroProps) => {
         >
           <Anchor className="w-8 h-8 text-cta" />
           <span className="text-white/90 uppercase tracking-[0.3em] text-sm font-medium">
-            Premium Yacht Experience
+            {hero.eyebrow}
           </span>
         </motion.div>
 
@@ -52,9 +52,9 @@ const Hero = ({ onBookNow }: HeroProps) => {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white font-semibold mb-6 leading-tight"
         >
-          Sail Into
+          {hero.titleLine1}
           <br />
-          <span className="text-cta">Paradise</span>
+          <span className="text-cta">{hero.titleHighlight}</span>
         </motion.h1>
 
         <motion.p
@@ -63,8 +63,7 @@ const Hero = ({ onBookNow }: HeroProps) => {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="text-white/80 text-lg sm:text-sm max-w-2xl mx-auto mb-10"
         >
-          Experience the ultimate luxury yacht charter. Crystal-clear waters,
-          stunning coastlines, and memories that last forever.
+          {hero.subtitle}
         </motion.p>
 
         <motion.div
@@ -74,10 +73,10 @@ const Hero = ({ onBookNow }: HeroProps) => {
           className="flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
           <Button variant="hero" size="xl" onClick={onBookNow}>
-            Book Your Adventure
+            {hero.primaryCta}
           </Button>
           <Button variant="heroOutline" size="xl" onClick={scrollToContent}>
-            Explore More
+            {hero.secondaryCta}
           </Button>
         </motion.div>
       </div>

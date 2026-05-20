@@ -21,12 +21,7 @@ const Header = ({ onBookNow, alwaysOpaque = false }: HeaderProps) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navLinks = [
-    { href: "#home", label: "Home" },
-    { href: "#about", label: "About" },
-    { href: "#fleet", label: "Our Fleet" },
-    { href: "#package-builder", label: "Plan Your Trip" },
-  ];
+  const navLinks = siteConfig.content.nav;
 
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
@@ -88,7 +83,7 @@ const Header = ({ onBookNow, alwaysOpaque = false }: HeaderProps) => {
               </button>
             ))}
             <Button variant="cta" size="default" onClick={onBookNow}>
-              Book Now
+              {siteConfig.content.bookNowLabel}
             </Button>
           </div>
 
@@ -133,7 +128,7 @@ const Header = ({ onBookNow, alwaysOpaque = false }: HeaderProps) => {
                 </button>
               ))}
               <Button variant="cta" size="lg" onClick={onBookNow} className="mt-2">
-                Book Now
+                {siteConfig.content.bookNowLabel}
               </Button>
             </div>
           </motion.div>

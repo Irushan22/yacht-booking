@@ -1,17 +1,18 @@
 import { motion } from "framer-motion";
 import { Anchor, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { siteConfig, buildWhatsAppUrl } from "@/config/site";
+import { siteConfig, buildWhatsAppUrl, fillCopy } from "@/config/site";
 
 interface CTAProps {
   /** Scrolls the page to the fleet section (passed down from the page). */
   onBookNow: () => void;
 }
 
+const cta = siteConfig.content.cta;
+
 const CTA = ({ onBookNow }: CTAProps) => {
   const handleWhatsApp = () => {
-    const message = `Hi ${siteConfig.name}! I'd like to know more about chartering a yacht.`;
-    window.open(buildWhatsAppUrl(message), "_blank");
+    window.open(buildWhatsAppUrl(fillCopy(cta.whatsappMessage)), "_blank");
   };
 
   return (
@@ -35,22 +36,21 @@ const CTA = ({ onBookNow }: CTAProps) => {
               <div className="flex items-center gap-2 mb-5">
                 <Anchor className="w-7 h-7 text-cta" />
                 <span className="text-foreground/70 uppercase tracking-[0.3em] text-sm font-medium">
-                  Your Voyage Awaits
+                  {cta.eyebrow}
                 </span>
               </div>
 
               <h2 className="font-display text-3xl sm:text-3xl lg:text-4xl text-foreground font-semibold mb-5 leading-tight">
-                Ready to Set Sail?
+                {cta.title}
               </h2>
 
               <p className="text-foreground/80 text-md mb-10">
-                Book your private yacht charter today. No payment required to inquire
-                — we'll confirm availability with you directly on WhatsApp.
+                {cta.body}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 items-stretch">
                 <Button variant="hero" size="xl" onClick={onBookNow} className="flex-1">
-                  Browse Our Fleet
+                  {cta.primaryCta}
                 </Button>
                 <Button
                   variant="outline"
@@ -59,7 +59,7 @@ const CTA = ({ onBookNow }: CTAProps) => {
                   className="flex-1 hover:bg-transparent hover:text-foreground hover:border-input hover:brightness-90"
                 >
                   <MessageCircle className="w-5 h-5 mr-2" />
-                  Chat on WhatsApp
+                  {cta.secondaryCta}
                 </Button>
               </div>
             </div>
@@ -76,7 +76,7 @@ const CTA = ({ onBookNow }: CTAProps) => {
         className="relative h-72 sm:h-96 lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 lg:h-auto"
       >
         <img
-          src="https://images.unsplash.com/photo-1605281317010-fe5ffe798166?auto=format&fit=crop&w=1280&q=80"
+          src={cta.image}
           alt="Luxury yacht cruising on open blue water"
           loading="lazy"
           className="absolute inset-0 w-full h-full object-cover"

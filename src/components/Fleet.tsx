@@ -4,13 +4,16 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Users, Ruler, DollarSign, ChevronDown } from "lucide-react";
 import { yachts, Yacht } from "@/data/yachts";
+import { siteConfig } from "@/config/site";
 
 interface FleetProps {
   onSelectYacht: (yacht: Yacht) => void;
 }
 
+const fleet = siteConfig.content.fleet;
+
 /** How many yachts to show before the visitor clicks "View All". */
-const INITIAL_COUNT = 8;
+const INITIAL_COUNT = fleet.initialCount;
 
 const Fleet = ({ onSelectYacht }: FleetProps) => {
   const navigate = useNavigate();
@@ -29,13 +32,12 @@ const Fleet = ({ onSelectYacht }: FleetProps) => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="text-primary text-sm font-semibold">Our Fleet</span>
+          <span className="text-primary text-sm font-semibold">{fleet.eyebrow}</span>
           <h2 className="font-display text-3xl sm:text-3xl lg:text-3xl text-foreground font-semibold mt-3 mb-4">
-            Choose Your <span className="text-primary">Vessel</span>
+            {fleet.titleLead} <span className="text-primary">{fleet.titleHighlight}</span>
           </h2>
           <p className="text-foreground/80 text-sm font-medium max-w-2xl mx-auto">
-            Select from our premium fleet of yachts, each offering a unique
-            experience tailored to your desires.
+            {fleet.subtitle}
           </p>
         </motion.div>
 
@@ -108,7 +110,7 @@ const Fleet = ({ onSelectYacht }: FleetProps) => {
                   variant="outline"
                   className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300"
                 >
-                  View Details
+                  {fleet.viewDetailsLabel}
                 </Button>
               </div>
             </motion.div>

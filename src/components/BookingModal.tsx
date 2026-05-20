@@ -30,17 +30,12 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { Yacht, yachts } from "@/data/yachts";
-import { buildWhatsAppUrl } from "@/config/site";
+import { buildWhatsAppUrl, siteConfig } from "@/config/site";
 import { z } from "zod";
 import { createPortal } from "react-dom";
 
-const timeSlots = [
-  { value: "08:00", label: "8:00 AM - Morning" },
-  { value: "10:00", label: "10:00 AM - Mid Morning" },
-  { value: "13:00", label: "1:00 PM - Afternoon" },
-  { value: "16:00", label: "4:00 PM - Late Afternoon" },
-  { value: "18:00", label: "6:00 PM - Sunset" },
-];
+const booking = siteConfig.content.booking;
+const timeSlots = booking.timeSlots;
 
 const bookingSchema = z.object({
   name: z.string().trim().min(2, "Name is required"),
@@ -166,10 +161,10 @@ ${notes ? `\n📝 *Notes:* ${notes}` : ""}`;
                 <div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
                     <Ship className="w-4 h-4" />
-                    {activeYacht ? activeYacht.type : "New Booking"}
+                    {activeYacht ? activeYacht.type : booking.newBookingType}
                   </div>
                   <h3 className="text-xl font-display font-semibold text-foreground">
-                    {activeYacht ? activeYacht.name : "Book Your Charter"}
+                    {activeYacht ? activeYacht.name : booking.newBookingTitle}
                   </h3>
                 </div>
                 <button

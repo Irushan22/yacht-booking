@@ -1,5 +1,7 @@
 import { Anchor, MapPin, Phone, Mail } from "lucide-react";
-import { siteConfig } from "@/config/site";
+import { siteConfig, fillCopy } from "@/config/site";
+
+const footer = siteConfig.content.footer;
 
 const Footer = () => {
   return (
@@ -15,14 +17,13 @@ const Footer = () => {
               </span>
             </div>
             <p className="text-background/60 text-sm leading-relaxed">
-              Premium yacht charter experiences. Creating unforgettable memories
-              on crystal-clear waters since {siteConfig.foundedYear}.
+              {fillCopy(footer.description)}
             </p>
           </div>
 
           {/* Contact */}
           <div>
-            <h4 className="font-semibold mb-4">Contact Us</h4>
+            <h4 className="font-semibold mb-4">{footer.contactHeading}</h4>
             <ul className="space-y-3 text-background/60 text-sm">
               <li className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-cta" />
@@ -45,12 +46,12 @@ const Footer = () => {
 
           {/* Hours */}
           <div>
-            <h4 className="font-semibold mb-4">Operating Hours</h4>
+            <h4 className="font-semibold mb-4">{footer.hoursHeading}</h4>
             <ul className="space-y-2 text-background/60 text-sm">
               <li>{siteConfig.hours.days}</li>
               <li>{siteConfig.hours.time}</li>
               <li className="text-cta font-medium pt-2">
-                Available for bookings year-round
+                {footer.availabilityNote}
               </li>
             </ul>
           </div>

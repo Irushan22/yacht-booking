@@ -11,6 +11,7 @@ import {
   Sparkles,
   Calculator,
   Send,
+  type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -23,36 +24,31 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { buildWhatsAppUrl } from "@/config/site";
+import { buildWhatsAppUrl, siteConfig } from "@/config/site";
+
+const pb = siteConfig.content.packageBuilder;
+
+/** Maps each add-on (by its config `key`) to the icon shown on its card. */
+const addOnIcons: Record<string, LucideIcon> = {
+  catering: Utensils,
+  dj: Music,
+  photography: Camera,
+  decorations: Sparkles,
+};
 
 const PackageBuilder = () => {
-  const [duration, setDuration] = useState([4]);
-  const [guests, setGuests] = useState([10]);
+  const [duration, setDuration] = useState<number[]>([pb.duration.default]);
+  const [guests, setGuests] = useState<number[]>([pb.guests.default]);
   const [date, setDate] = useState<Date>();
-  const [addOns, setAddOns] = useState({
-    catering: false,
-    dj: false,
-    photography: false,
-    decorations: false,
-  });
-
-  // Pricing constants (Estimated)
-  const BASE_RATE_PER_HOUR = 200; // Average yacht hourly rate
-  const PER_HEAD_CATERING = 45;
-  const DJ_FLAT_FEE = 400;
-  const PHOTOGRAPHY_FLAT_FEE = 300;
-  const DECOR_FLAT_FEE = 250;
+  const [addOns, setAddOns] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(pb.addOns.map((a) => [a.key, false])),
+  );
 
   const estimatedBudget = useMemo(() => {
-    let total = duration[0] * BASE_RATE_PER_HOUR;
-
-    if (addOns.catering) {
-      total += guests[0] * PER_HEAD_CATERING;
+    let total = duration[0] * pb.baseRatePerHour;
+    for (const a of pb.addOns) {
+      if (addOns[a.key]) total += a.perGuest ? guests[0] * a.fee : a.fee;
     }
-    if (addOns.dj) total += DJ_FLAT_FEE;
-    if (addOns.photography) total += PHOTOGRAPHY_FLAT_FEE;
-    if (addOns.decorations) total += DECOR_FLAT_FEE;
-
     return total;
   }, [duration, guests, addOns]);
 
@@ -60,9 +56,9 @@ const PackageBuilder = () => {
     const formattedDate = date
       ? format(date, "EEEE, MMMM do, yyyy")
       : "Date not selected";
-    const selectedAddOns = Object.entries(addOns)
-      .filter(([_, isSelected]) => isSelected)
-      .map(([name]) => name.charAt(0).toUpperCase() + name.slice(1))
+    const selectedAddOns = pb.addOns
+      .filter((a) => addOns[a.key])
+      .map((a) => a.label)
       .join(", ");
 
     const message = `✨ *Custom Package Enquiry*
@@ -101,14 +97,13 @@ _I would like to check availability for this custom package._`;
           className="text-center mb-16"
         >
           <span className="text-primary text-sm font-semibold">
-            Tailor Made For You
+            {pb.eyebrow}
           </span>
           <h2 className="font-display text-3xl sm:text-3xl lg:text-3xl text-foreground font-semibold mt-3 mb-4">
-            Build Your <span className="text-primary">Perfect Package</span>
+            {pb.titleLead} <span className="text-primary">{pb.titleHighlight}</span>
           </h2>
           <p className="text-foreground/80 text-sm font-medium max-w-2xl mx-auto">
-            Customize every detail of your voyage. Select your preferences and
-            get an instant estimated budget.
+            {pb.subtitle}
           </p>
         </motion.div>
 
@@ -166,15 +161,15 @@ _I would like to check availability for this custom package._`;
                 </div>
                 <Slider
                   value={duration}
-                  min={2}
-                  max={10}
+                  min={pb.duration.min}
+                  max={pb.duration.max}
                   step={1}
                   onValueChange={setDuration}
                   className="py-4"
                 />
                 <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>2 Hours</span>
-                  <span>10 Hours</span>
+                  <span>{pb.duration.min} Hours</span>
+                  <span>{pb.duration.max} Hours</span>
                 </div>
               </div>
 
@@ -191,15 +186,15 @@ _I would like to check availability for this custom package._`;
                 </div>
                 <Slider
                   value={guests}
-                  min={2}
-                  max={50}
+                  min={pb.guests.min}
+                  max={pb.guests.max}
                   step={1}
                   onValueChange={setGuests}
                   className="py-4"
                 />
                 <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>2 People</span>
-                  <span>50 People</span>
+                  <span>{pb.guests.min} People</span>
+                  <span>{pb.guests.max} People</span>
                 </div>
               </div>
 
@@ -210,107 +205,36 @@ _I would like to check availability for this custom package._`;
                   Enhance Your Experience
                 </Label>
                 <div className="grid sm:grid-cols-2 gap-4">
-                  <div
-                    className={`flex items-start space-x-3 p-4 rounded-xl border transition-all cursor-pointer ${addOns.catering ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"}`}
-                    onClick={() =>
-                      setAddOns((prev) => ({
-                        ...prev,
-                        catering: !prev.catering,
-                      }))
-                    }
-                  >
-                    <Checkbox
-                      checked={addOns.catering}
-                      id="catering"
-                      className="mt-1"
-                    />
-                    <div className="grid gap-1.5 leading-none pointer-events-none">
-                      <label
-                        htmlFor="catering"
-                        className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2"
+                  {pb.addOns.map((addOn) => {
+                    const Icon = addOnIcons[addOn.key];
+                    const checked = addOns[addOn.key];
+                    return (
+                      <div
+                        key={addOn.key}
+                        className={`flex items-start space-x-3 p-4 rounded-xl border transition-all cursor-pointer ${checked ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"}`}
+                        onClick={() =>
+                          setAddOns((prev) => ({
+                            ...prev,
+                            [addOn.key]: !prev[addOn.key],
+                          }))
+                        }
                       >
-                        <Utensils className="w-4 h-4 text-cta" /> Premium
-                        Catering
-                      </label>
-                      <p className="text-sm text-muted-foreground">
-                        Exclude food & drinks (${PER_HEAD_CATERING}/person)
-                      </p>
-                    </div>
-                  </div>
-
-                  <div
-                    className={`flex items-start space-x-3 p-4 rounded-xl border transition-all cursor-pointer ${addOns.dj ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"}`}
-                    onClick={() =>
-                      setAddOns((prev) => ({ ...prev, dj: !prev.dj }))
-                    }
-                  >
-                    <Checkbox checked={addOns.dj} id="dj" className="mt-1" />
-                    <div className="grid gap-1.5 leading-none pointer-events-none">
-                      <label
-                        htmlFor="dj"
-                        className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2"
-                      >
-                        <Music className="w-4 h-4 text-cta" /> Live DJ
-                      </label>
-                      <p className="text-sm text-muted-foreground">
-                        Set the vibe with a pro DJ (${DJ_FLAT_FEE})
-                      </p>
-                    </div>
-                  </div>
-
-                  <div
-                    className={`flex items-start space-x-3 p-4 rounded-xl border transition-all cursor-pointer ${addOns.photography ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"}`}
-                    onClick={() =>
-                      setAddOns((prev) => ({
-                        ...prev,
-                        photography: !prev.photography,
-                      }))
-                    }
-                  >
-                    <Checkbox
-                      checked={addOns.photography}
-                      id="photography"
-                      className="mt-1"
-                    />
-                    <div className="grid gap-1.5 leading-none pointer-events-none">
-                      <label
-                        htmlFor="photography"
-                        className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2"
-                      >
-                        <Camera className="w-4 h-4 text-cta" /> Photography
-                      </label>
-                      <p className="text-sm text-muted-foreground">
-                        Capture every moment (${PHOTOGRAPHY_FLAT_FEE})
-                      </p>
-                    </div>
-                  </div>
-
-                  <div
-                    className={`flex items-start space-x-3 p-4 rounded-xl border transition-all cursor-pointer ${addOns.decorations ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"}`}
-                    onClick={() =>
-                      setAddOns((prev) => ({
-                        ...prev,
-                        decorations: !prev.decorations,
-                      }))
-                    }
-                  >
-                    <Checkbox
-                      checked={addOns.decorations}
-                      id="decorations"
-                      className="mt-1"
-                    />
-                    <div className="grid gap-1.5 leading-none pointer-events-none">
-                      <label
-                        htmlFor="decorations"
-                        className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2"
-                      >
-                        <Sparkles className="w-4 h-4 text-cta" /> Custom Decor
-                      </label>
-                      <p className="text-sm text-muted-foreground">
-                        Themed decorations (${DECOR_FLAT_FEE})
-                      </p>
-                    </div>
-                  </div>
+                        <Checkbox checked={checked} id={addOn.key} className="mt-1" />
+                        <div className="grid gap-1.5 leading-none pointer-events-none">
+                          <label
+                            htmlFor={addOn.key}
+                            className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2"
+                          >
+                            {Icon && <Icon className="w-4 h-4 text-cta" />} {addOn.label}
+                          </label>
+                          <p className="text-sm text-muted-foreground">
+                            {addOn.description} (${addOn.fee}
+                            {addOn.perGuest ? "/person" : ""})
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -347,32 +271,21 @@ _I would like to check availability for this custom package._`;
                 <ul className="w-full space-y-3 text-sm opacity-80">
                   <li className="flex justify-between">
                     <span>Duration ({duration[0]}h)</span>
-                    <span>${duration[0] * BASE_RATE_PER_HOUR}</span>
+                    <span>${duration[0] * pb.baseRatePerHour}</span>
                   </li>
-                  {addOns.catering && (
-                    <li className="flex justify-between">
-                      <span>Catering ({guests[0]} ppl)</span>
-                      <span>${guests[0] * PER_HEAD_CATERING}</span>
-                    </li>
-                  )}
-                  {addOns.dj && (
-                    <li className="flex justify-between">
-                      <span>Live DJ</span>
-                      <span>${DJ_FLAT_FEE}</span>
-                    </li>
-                  )}
-                  {addOns.photography && (
-                    <li className="flex justify-between">
-                      <span>Photography</span>
-                      <span>${PHOTOGRAPHY_FLAT_FEE}</span>
-                    </li>
-                  )}
-                  {addOns.decorations && (
-                    <li className="flex justify-between">
-                      <span>Decorations</span>
-                      <span>${DECOR_FLAT_FEE}</span>
-                    </li>
-                  )}
+                  {pb.addOns
+                    .filter((addOn) => addOns[addOn.key])
+                    .map((addOn) => (
+                      <li key={addOn.key} className="flex justify-between">
+                        <span>
+                          {addOn.label}
+                          {addOn.perGuest ? ` (${guests[0]} ppl)` : ""}
+                        </span>
+                        <span>
+                          ${addOn.perGuest ? guests[0] * addOn.fee : addOn.fee}
+                        </span>
+                      </li>
+                    ))}
                 </ul>
 
                 <Button
