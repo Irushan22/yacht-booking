@@ -201,7 +201,11 @@ ${notes ? `\n📝 *Notes:* ${notes}` : ""}`;
                       </SelectTrigger>
                       <SelectContent>
                         {yachts.map((y) => (
-                          <SelectItem key={y.id} value={y.id}>
+                          <SelectItem
+                            key={y.id}
+                            value={y.id}
+                            className="focus:bg-primary focus:text-primary-foreground"
+                          >
                             {y.name} — {y.type}
                           </SelectItem>
                         ))}
@@ -284,7 +288,11 @@ ${notes ? `\n📝 *Notes:* ${notes}` : ""}`;
                     </SelectTrigger>
                     <SelectContent>
                       {timeSlots.map((slot) => (
-                        <SelectItem key={slot.value} value={slot.value}>
+                        <SelectItem
+                          key={slot.value}
+                          value={slot.value}
+                          className="focus:bg-primary focus:text-primary-foreground"
+                        >
                           {slot.label}
                         </SelectItem>
                       ))}
