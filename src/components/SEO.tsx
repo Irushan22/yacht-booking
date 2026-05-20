@@ -9,6 +9,8 @@ interface SEOProps {
   name?: string;
   image?: string;
   schema?: Record<string, unknown>;
+  /** When true, asks search engines not to index this page. */
+  noindex?: boolean;
 }
 
 const SEO = ({
@@ -18,7 +20,8 @@ const SEO = ({
   type = "website",
   name = siteConfig.name,
   image = siteConfig.seo.ogImage,
-  schema
+  schema,
+  noindex = false
 }: SEOProps) => {
   const siteUrl = siteConfig.url;
   const fullUrl = canonical ? `${siteUrl}${canonical}` : siteUrl;
@@ -29,6 +32,7 @@ const SEO = ({
       {/* Standard Metadata */}
       <title>{title}</title>
       <meta name="description" content={description} />
+      {noindex && <meta name="robots" content="noindex, nofollow" />}
       <link rel="canonical" href={fullUrl} />
 
       {/* Open Graph / Facebook */}

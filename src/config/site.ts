@@ -58,11 +58,14 @@ export const siteConfig = {
     time: "8:00 AM - 8:00 PM",
   },
 
-  /** Social links. Leave a value empty ("") to hide that link. */
+  /**
+   * Social links shown as icons in the footer. Leave a value empty ("") to
+   * hide that icon. Use the full profile URL for Instagram/Facebook.
+   */
   social: {
-    instagram: "",
-    facebook: "",
-    twitter: "", // X / Twitter handle WITHOUT the @, e.g. "paradiseyacht"
+    instagram: "https://instagram.com/paradiseyacht",
+    facebook: "https://facebook.com/paradiseyacht",
+    twitter: "paradiseyacht", // X / Twitter handle WITHOUT the @
   },
 
   /** Default SEO metadata used as fallbacks across pages. */
@@ -199,6 +202,99 @@ export const siteConfig = {
         { value: "18:00", label: "6:00 PM - Sunset" },
       ],
     },
+
+    /**
+     * ------------------------------------------------------------------------
+     *  LEGAL PAGES  —  /privacy and /terms
+     * ------------------------------------------------------------------------
+     * IMPORTANT: This is starter boilerplate, NOT legal advice. Have a
+     * qualified professional review and adapt it before you go live. Tokens
+     * like {name}, {email}, {phone}, {address}, {city} are filled in for you.
+     */
+    legal: {
+      /** Shown as "Last updated" on both pages. Format: YYYY-MM-DD. */
+      lastUpdated: "2026-05-20",
+      /** Banner shown at the top of every legal page. Set to "" to hide it. */
+      disclaimer:
+        "This is template content provided as a starting point only and does not constitute legal advice. Please review and adapt it with a qualified professional before publishing.",
+      footerHeading: "Legal",
+
+      privacy: {
+        title: "Privacy Policy",
+        intro:
+          "This Privacy Policy explains how {name} collects, uses, and protects the information you provide when you use our website or send us a booking enquiry.",
+        sections: [
+          {
+            heading: "Information We Collect",
+            body: "When you submit a booking or custom-package enquiry we collect the details you enter — typically your name, phone number, preferred date, party size, and any message. We do not collect payment information on this website.",
+          },
+          {
+            heading: "How We Use Your Information",
+            body: "We use your details solely to respond to your enquiry, confirm availability, and arrange your charter. We do not sell your information.",
+          },
+          {
+            heading: "WhatsApp & Third Parties",
+            body: "Booking enquiries are sent through WhatsApp, so the details you submit are shared with WhatsApp/Meta Platforms to deliver your message. Our site also loads fonts from Google and media from third-party providers, which may receive your IP address as part of serving those resources.",
+          },
+          {
+            heading: "Cookies & Tracking",
+            body: "This website does not set advertising or analytics cookies by default. [TODO: update this section if you add analytics, a pixel, or a consent banner.]",
+          },
+          {
+            heading: "Data Retention",
+            body: "We keep enquiry details only as long as needed to assist you and to meet our legal and business obligations. [TODO: state your retention period.]",
+          },
+          {
+            heading: "Your Rights",
+            body: "You may request access to, correction of, or deletion of your personal data. To make a request, contact us using the details below. [TODO: tailor to the privacy laws that apply to you, e.g. UAE PDPL or GDPR.]",
+          },
+          {
+            heading: "Contact Us",
+            body: "For any privacy questions, contact {name} at {email} or {phone}, {address}.",
+          },
+        ],
+      },
+
+      terms: {
+        title: "Terms of Service",
+        intro:
+          "These Terms govern your use of the {name} website and the booking enquiries you submit through it. By using the site you agree to these Terms.",
+        sections: [
+          {
+            heading: "Bookings & Enquiries",
+            body: "Submitting an enquiry is a request, not a confirmed booking. A charter is only confirmed once we agree the details with you directly (for example, via WhatsApp). We may decline or be unable to fulfil any request.",
+          },
+          {
+            heading: "Pricing & Estimates",
+            body: "Prices shown on the site, including any figure produced by the package builder, are estimates for guidance only and are not a binding quote. Final pricing is confirmed before your charter. [TODO: add taxes/fees, deposit, and payment terms.]",
+          },
+          {
+            heading: "Cancellations & Refunds",
+            body: "[TODO: describe your cancellation windows, rescheduling policy, and any deposit or refund rules.]",
+          },
+          {
+            heading: "Conduct & Safety",
+            body: "Guests must follow the instructions of the captain and crew at all times. [TODO: add your safety rules, guest conduct policy, and any age or capacity limits.]",
+          },
+          {
+            heading: "Liability",
+            body: "[TODO: add your liability and limitation-of-liability terms, reviewed by a qualified professional.]",
+          },
+          {
+            heading: "Governing Law",
+            body: "These Terms are governed by the laws applicable in {city}. [TODO: confirm the correct governing law and jurisdiction.]",
+          },
+          {
+            heading: "Changes to These Terms",
+            body: "We may update these Terms from time to time. The current version is always available on this page, with the date shown above.",
+          },
+          {
+            heading: "Contact",
+            body: "Questions about these Terms? Contact {name} at {email} or {phone}.",
+          },
+        ],
+      },
+    },
   },
 } as const;
 
@@ -220,5 +316,10 @@ export const yearsInBusiness = (): number =>
 export const fillCopy = (text: string, years = yearsInBusiness()): string =>
   text
     .replace(/\{name\}/g, siteConfig.name)
+    .replace(/\{email\}/g, siteConfig.contact.email)
+    .replace(/\{phone\}/g, siteConfig.contact.phoneDisplay)
+    .replace(/\{address\}/g, siteConfig.contact.address)
+    .replace(/\{city\}/g, siteConfig.location.city)
+    .replace(/\{url\}/g, siteConfig.url)
     .replace(/\{foundedYear\}/g, String(siteConfig.foundedYear))
     .replace(/\{years\}/g, String(years));
